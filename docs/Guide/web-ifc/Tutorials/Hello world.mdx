@@ -10,3 +10,23 @@ import {IfcCard} from "../../../../src/components/Card/InfoCard";
 <IfcCard icon="💙" title="Thanks for your interest in IFC.js!">
     We are building this section of the documentation right now. In the meantime, you can join the <a href="https://discord.gg/FXfyR4XrKT">Discord channel</a> and ask us any questions you need to implement IFC.js or to join the project.
 </IfcCard>
+
+## Introduction
+
+  ⚡
+Creating a BIM application with IFC.js is very easy. You can find the complete project of the guide [here](https://github.com/IFCjs/hello-world/tree/main/examples/web-ifc/ifc-to-json/frontend) or [here](https://github.com/IFCjs/hello-world/tree/main/examples/web-ifc/ifc-to-json/node) and the deployed application [here](https://ifcjs.github.io/hello-world/examples/web-ifc/ifc-to-json/frontend). You only need to have <a href="https://nodejs.org/en/">Node.js</a> and any IDE installed to follow the steps below. Also, if you don't have any IFC files to follow along, you can get some [here](https://github.com/IFCjs/test-ifc-files).
+
+  <IfcAlert>
+Using IFC.js requires a basic knowledge of JavaScript. If you have no previous experience with JavaScript, you can learn more on [javascript.info](https://javascript.info) or [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript).
+  </IfcAlert>
+
+You might be wondering why use `web-ifc` if there is `web-ifc-viewer` and `web-ifc-three`. As stated in the [Introduction](../Introduction.mdx), `web-ifc` is **lightest** and **most flexible** module of IFC.js that **does not implement a 3d viewer**. This means you can run it in non-browser environment like Node.js, Deno, or even Edge Functions as long as they support WebAssembly. Some `web-ifc` use cases are:
+
+* Build SaaS or backend service that analyze, convert, or modify IFC file
+* Integrate your own custom renderer with `web-ifc` (i.e rendering IFC model as voxel, make interactive floor-plan from IFC files)
+* Write automated tests for validating IFC model
+* and many more
+
+  🐣
+This minimal tutorial will be done with Vanilla JavaScript, without using any backend/frontend frameworks like React, Express, etc. However, the same steps can be adapted and applied to any of these use cases.
+
