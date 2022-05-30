@@ -188,9 +188,60 @@ Notice that we hook button click event to trigger input click. This will make `<
 
 <!-- TODO -->
 
+```js
+import {IfcAPI} from "web-ifc/web-ifc-api";
+
+const ifcapi = new IfcAPI();
+ifcapi.SetWasmPath("../../../../");
+
+const input = document.getElementById("file-input");
+input.addEventListener(
+    "change",
+    (changed) => {
+        const reader = new FileReader();
+        reader.onload = () => LoadFile(reader.result);
+        reader.readAsText(changed.target.files[0]);
+    },
+    false
+);
+
+async function LoadFile(ifcAsText) {
+    leftContainer.innerHTML = ifcAsText.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    const uint8array = new TextEncoder().encode(ifcAsText);
+    const modelID = await OpenIfc(uint8array);
+
+    ifcapi.CloseModel(modelID);
+}
+
+async function OpenIfc(ifcAsText) {
+    await ifcapi.Init();
+    return ifcapi.OpenModel(ifcAsText);
+}
+```
+
 #### from Node.js
 
 <!-- TODO -->
+
+```js
+const WebIFC = require('web-ifc/web-ifc-api-node');
+const fs = require("fs");
+
+const ifcapi = new WebIFC.IfcAPI();
+
+async function LoadFile(filename)
+{
+    const modelID = await OpenIfc(filename);
+
+    ifcapi.CloseModel(modelID);
+}
+
+async function OpenIfc(filename) {
+    const ifcData = fs.readFileSync(filename);
+    await ifcapi.Init();
+    return ifcapi.OpenModel(ifcData);
+}
+```
 
 ### Loading our models
 
@@ -211,6 +262,71 @@ Only works on Node.js or Deno.
 
   🔂
 After we get the `modelID`, we can now display all the properties in JSON format.
+
+```js
+function GetAllItems(modelID, excludeGeometry = true) {
+    const allItems = {};
+    const lines = ifcapi.GetAllLines(modelID);
+    getAllItemsFromLines(modelID, lines, allItems, excludeGeometry);
+    return allItems;
+}
+
+function getAllItemsFromLines(modelID, lines, allItems, excludeGeometry) {
+    for (let i = 1; i <= lines.size(); i++) {
+        try {
+            saveProperties(modelID, lines, allItems, excludeGeometry, i);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+}
+
+function saveProperties(modelID, lines, allItems, excludeGeometry, index) {
+    const itemID = lines.get(index);
+    const props = ifcapi.GetLine(modelID, itemID);
+    props.type = props.__proto__.constructor.name;
+    if (!excludeGeometry || !geometryTypes.has(props.type)) {
+        allItems[itemID] = props;
+    }
+}
+```
+<!-- TODO -->
+
+Now we can integrate it into `LoadFile` function
+
+* for browser
+
+```js
+async function LoadFile(ifcAsText) {
+    leftContainer.innerHTML = ifcAsText.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    const uint8array = new TextEncoder().encode(ifcAsText);
+    const modelID = await OpenIfc(uint8array);
+
+    /// read all properties and display it in JSON format ///
+    const allItems = GetAllItems(modelID);
+    const result = JSON.stringify(allItems, undefined, 2);
+    json.textContent  = result;
+    //////////////////////////////////////////////////////
+
+    ifcapi.CloseModel(modelID);
+}
+```
+
+* for Node.js
+
+```js
+async function LoadFile(filename)
+{
+    const modelID = await OpenIfc(filename);
+
+    /// read all properties and save it as ifc-properties.json ///
+    const allItems = GetAllItems(modelID);
+    fs.writeFileSync('ifc-properties.json', JSON.stringify(allItems));
+    //////////////////////////////////////////////////////////////////
+
+    ifcapi.CloseModel(modelID);
+}
+```
 
 # Conclusion
 
