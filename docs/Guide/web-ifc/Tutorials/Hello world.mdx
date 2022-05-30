@@ -30,3 +30,148 @@ You might be wondering why use `web-ifc` if there is `web-ifc-viewer` and `web-i
   🐣
 This minimal tutorial will be done with Vanilla JavaScript, without using any backend/frontend frameworks like React, Express, etc. However, the same steps can be adapted and applied to any of these use cases.
 
+## Setting up the project
+
+### Install libraries
+
+  👩‍🏫
+The first thing to do is to create an empty folder and start a new npm project with the command `npm init`. This will generate a `package.json` file containing some data such as the project name, version, commands and dependencies. In addition, the following dependencies must be installed with npm:
+
+```bash
+    //Install IFC.js
+    npm i web-ifc
+
+    // Install a bundler: we will use rollup.js for this guide
+    npm i rollup --save-dev
+    npm i @rollup/plugin-node-resolve --save-dev
+```
+
+  📝
+The next step is to create an HTML file named `index.html` as the main document of the application. The HTML will have:
+- A **button/input element** for opening single IFC file.
+- A **div element** on the left that print IFC file content.
+- A **div element** on the right for displaying allIFC properties as JSON.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="styles.css">
+      <title>IFC.js</title>
+  </head>
+  <body>
+    <div class="file-opener">
+        <button class="basic-button" id="file-opener-button">Open IFC</button>
+    </div>
+    <input class="invisible" id="file-input" type="file">
+    <div class="general-container">
+        <div class="container" id="left-container"></div>
+        <div class="separator"></div>
+        <div class="container" id="right-container"><pre id="json"></pre></div>
+    </div>
+    <script src="bundle.js"></script>
+  </body>
+</html>
+```
+Note that the `<input>` element is invisible.
+
+### Adding style
+
+  🎨
+This `style.css` file will properly layout the page:
+
+```css
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow: hidden;
+    background-color: #F3F4F6;
+}
+
+.general-container {
+    background-color: white;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    margin: 2rem;
+    display: flex;
+}
+
+.container {
+    padding: 1rem;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    width:50px;
+    word-wrap: break-word;
+    overflow-y: scroll;
+}
+
+.separator {
+    border: 2px solid #F3F4F6;
+}
+
+.file-opener {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    top: 3rem;
+    right: 4rem;
+}
+
+.basic-button {
+    background-color: #F3F4F6;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: none;
+    transition: all 0.1s ease-in-out;
+    box-shadow: 0 0 0 0 #e6e6e6;
+    margin: 1rem;
+}
+
+.basic-button:hover {
+    background-color: white;
+    box-shadow: 0 10px 20px 8px #e6e6e6;
+}
+
+.basic-button:active {
+    background-color: #F3F4F6;
+}
+
+.invisible {
+    visibility: collapse;
+}
+```
+
+### Accessing HTML element in JavaScript
+
+  📁
+To accesss all declared element in `index.html`, we need to add this line in the `app.js` file:
+
+```js
+const button = document.getElementById("file-opener-button");
+button.addEventListener('click', () => input.click());
+
+const leftContainer = document.getElementById("left-container");
+const saveButton = document.getElementById("save-button");
+
+const json = document.getElementById("json");
+```
+
+Notice that we hook button click event to trigger input click. This will make `<button>` element like file opener.
+
+### Bundling and WebAssembly
+
+🎯📁 As for the next steps, you can follow [Hello World](../../Hello%20world.mdx) guide to create `rollup.config.js` files and also copy the necessary `.wasm` files from `node_modules\web-ifc`.
+
