@@ -249,6 +249,20 @@ async function OpenIfc(filename) {
 }
 ```
 
+Now we can ask CLI user from terminal on where to load the IFC file
+
+```js
+LoadFile(process.argv[2])
+```
+
+then we can run our script by providing the path of the IFC file
+
+```
+node main.js assets/mymodel.ifc
+```
+
+now it will print the `modelID` of `assets/mymodel.ifc` in the terminal.
+
 ### Loading our models
 
   🤔
