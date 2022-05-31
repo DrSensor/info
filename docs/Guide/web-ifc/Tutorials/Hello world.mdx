@@ -264,30 +264,28 @@ Only works on Node.js or Deno.
 After we get the `modelID`, we can now display all the properties in JSON format.
 
 ```js
-function GetAllItems(modelID, excludeGeometry = true) {
+function GetAllItems(modelID) {
     const allItems = {};
     const lines = ifcapi.GetAllLines(modelID);
-    getAllItemsFromLines(modelID, lines, allItems, excludeGeometry);
+    getAllItemsFromLines(modelID, lines, allItems);
     return allItems;
 }
 
-function getAllItemsFromLines(modelID, lines, allItems, excludeGeometry) {
+function getAllItemsFromLines(modelID, lines, allItems) {
     for (let i = 1; i <= lines.size(); i++) {
         try {
-            saveProperties(modelID, lines, allItems, excludeGeometry, i);
+            saveProperties(modelID, lines, allItems, i);
         } catch (e) {
             console.log(e);
         }
     }
 }
 
-function saveProperties(modelID, lines, allItems, excludeGeometry, index) {
+function saveProperties(modelID, lines, allItems, index) {
     const itemID = lines.get(index);
     const props = ifcapi.GetLine(modelID, itemID);
     props.type = props.__proto__.constructor.name;
-    if (!excludeGeometry || !geometryTypes.has(props.type)) {
-        allItems[itemID] = props;
-    }
+    allItems[itemID] = props;
 }
 ```
 <!-- TODO -->
