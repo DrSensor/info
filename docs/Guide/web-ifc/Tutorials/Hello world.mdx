@@ -284,7 +284,7 @@ function getAllItemsFromLines(modelID, lines, allItems) {
 function saveProperties(modelID, lines, allItems, index) {
     const itemID = lines.get(index);
     const props = ifcapi.GetLine(modelID, itemID);
-    props.type = props.__proto__.constructor.name;
+    props.type = props.constructor.name;
     allItems[itemID] = props;
 }
 ```
