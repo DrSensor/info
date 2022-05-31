@@ -192,7 +192,6 @@ Notice that we hook button click event to trigger input click. This will make `<
 import {IfcAPI} from "web-ifc/web-ifc-api";
 
 const ifcapi = new IfcAPI();
-ifcapi.SetWasmPath("../../../../");
 
 const input = document.getElementById("file-input");
 input.addEventListener(
@@ -217,6 +216,13 @@ async function OpenIfc(ifcAsText) {
     await ifcapi.Init();
     return ifcapi.OpenModel(ifcAsText);
 }
+```
+
+  🎣
+Keep in mind that if you haven't saved the wasm files in the root of served files of the project, you'll need to specify its location with `SetWasmPath`. For instance, if we had them stored in a folder called `wasm` contained in a folder called `static` in the root of the project, we would do the following:
+
+```js
+  ifcapi.SetWasmPath("static/wasm/");
 ```
 
 #### from Node.js
