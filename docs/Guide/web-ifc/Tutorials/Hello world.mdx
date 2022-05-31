@@ -189,7 +189,7 @@ Notice that we hook button click event to trigger input click. This will make `<
 <!-- TODO -->
 
 ```js
-import {IfcAPI} from "web-ifc/web-ifc-api";
+import { IfcAPI } from "web-ifc/web-ifc-api";
 
 const ifcapi = new IfcAPI();
 
@@ -205,15 +205,15 @@ input.addEventListener(
 );
 
 async function LoadFile(ifcAsText) {
-    leftContainer.innerHTML = ifcAsText.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    leftContainer.innerHTML = ifcAsText.replace(/(?:\r\n|\r|\n)/g, '<br>'); // display the .ifc file content in multi-line format
     const uint8array = new TextEncoder().encode(ifcAsText);
     const modelID = await OpenIfc(uint8array);
-
+    console.log(modelID)
     ifcapi.CloseModel(modelID);
 }
 
 async function OpenIfc(ifcAsText) {
-    await ifcapi.Init();
+    await ifcapi.Init(); // this will initialize web-ifc.wasm and expose it to JavaScript
     return ifcapi.OpenModel(ifcAsText);
 }
 ```
@@ -238,13 +238,13 @@ const ifcapi = new WebIFC.IfcAPI();
 async function LoadFile(filename)
 {
     const modelID = await OpenIfc(filename);
-
+    console.log(modelID)
     ifcapi.CloseModel(modelID);
 }
 
 async function OpenIfc(filename) {
     const ifcData = fs.readFileSync(filename);
-    await ifcapi.Init();
+    await ifcapi.Init(); // this will initialize web-ifc.wasm and expose it to JavaScript
     return ifcapi.OpenModel(ifcData);
 }
 ```
