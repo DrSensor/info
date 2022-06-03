@@ -177,16 +177,15 @@ Notice that we hook button click event to trigger input click. This will make `<
 
 ## Loading IFC files
 
-<!-- TODO -->
-
 ### Loading user's models
 
   🏠
-<!-- TODO -->
+Finally, we will use `web-ifc` to load IFC files. This can be done by instantiating the `IfcAPI` then pass the loaded IFC file as buffer (bytes in `Uint8Array`) to `OpenModel` method.
 
 #### from browser
 
-<!-- TODO -->
+  🌐
+To accept user's model in the browser, we can create an event for when the user uploads an IFC file to the HTML `<input>` element.
 
 ```js
 import { IfcAPI } from "web-ifc/web-ifc-api";
@@ -206,7 +205,7 @@ input.addEventListener(
 
 async function LoadFile(ifcAsText) {
     leftContainer.innerHTML = ifcAsText.replace(/(?:\r\n|\r|\n)/g, '<br>'); // display the .ifc file content in multi-line format
-    const uint8array = new TextEncoder().encode(ifcAsText);
+    const uint8array = new TextEncoder().encode(ifcAsText); // since the model was `readAsText`, we need to encode it as a stream of UTF-8 *bytes*
     const modelID = await OpenIfc(uint8array);
     console.log(modelID)
     ifcapi.CloseModel(modelID);
@@ -225,9 +224,13 @@ Keep in mind that if you haven't saved the wasm files in the root of served file
   ifcapi.SetWasmPath("static/wasm/");
 ```
 
+If you have done everything correctly, you can see the `modelID` of your model in the browser console.
+
 #### from Node.js
 
-<!-- TODO -->
+  🟢
+In Node.js, the process are more straightforward. We can just read the model from the filesystem.
+This approach can be handy if you do quick prototyping or testing some model if it can be loaded correctly.
 
 ```js
 const WebIFC = require('web-ifc/web-ifc-api-node');
